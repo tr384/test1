@@ -12,7 +12,25 @@ let webstore = new Vue({
     targetLesson: null,
     searchTerm: "",
   },
+  created: function(){
+  
+  
+  fetch("http://localhost:3000/collections/lessons").then(
+    function(response){
+      response.json().then(
+        function(json){
+          alert(json);
+          console.log(json);
+          project.lesson = json;
+        }
+      )
+    }
+  )
+},
+  
   methods: {
+
+
     togglePage() {
       if (this.activePage === "lessons") {
         this.activePage = "confirm";
@@ -106,7 +124,7 @@ let webstore = new Vue({
       return isNameCorrect && isPhoneCorrect;
     },
   },
-  mounted() {
+ /*  mounted() {
     this.getLessons()
   },
   watch: {
@@ -118,4 +136,4 @@ let webstore = new Vue({
       }
     },
   },
-});
+}) */
