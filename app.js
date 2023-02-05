@@ -1,3 +1,5 @@
+const API_URL = "http://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com";
+
 let app = new Vue ({
     el: '#app',
     data:{
@@ -5,10 +7,10 @@ let app = new Vue ({
         sitename:'e-learning Store',
         onHome: true,
         // showlesson: true,
-        url: "http://localhost:3000",
+        url: "http://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com",
         //canAddToCart:true,
-        search:"",
         cart:[],
+        searchTerm: "",
         order: {
           name: "",
           phone:"",
@@ -27,7 +29,7 @@ let app = new Vue ({
 
     // fetching the lessons in json from the get path
     created: function () {
-        fetch("http://localhost:3000/collections/lessons")
+        fetch("http://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com/collections/lessons")
           .then((response) => response.json())
           .then((lessons) => {
             this.lessons = lessons;
@@ -63,9 +65,19 @@ methods: {
             console.log("Error");
           });
       },
+    
+      async search() { // This is a search function through the api endpoint
+        let response = await fetch(`${this.url}/lessons/${this.searchTerm}`, { // search term function is used for the fetch get request to the api
+          method: "GET",
+        });
+        let data = await response.json(); // the response is stored then called by the response.json
+        this.lessons = data;
+  
+        console.log("data: ", data); // log message will format the values and process information.
+      },
 
       createNewOrder(order) {
-        fetch("http://localhost:3000/collections/orders", {
+        fetch("http://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com/collections/orders", {
           method: "POST", //set the HTTP method as "POST"
           headers: {
             "Content-Type": "application/json", //set the data type as JSON
@@ -256,6 +268,15 @@ computed:{
             handler(val) {
               this.getLessons();
             },
+          },
+        },
+        watch: { // This function allows the search term to change values when a letter is being processed
+          searchTerm() {
+            if(this.searchTerm) {
+              this.search();
+            } else {
+              this.getLessons();
+            }
           },
         },
       });

@@ -55,6 +55,16 @@ app.param("collectionName", function (req, res, next, collectionName) {
     });
   });
 
+  async function searchLesson(searchTerm) { // search lesson function allows the mongodb used to search for the lessons matching in the database from the collections
+    return client
+      .db("project")
+      .collection("lessons") 
+      .find({
+        topic: { $regex: searchTerm, $options: "is" },
+      })
+      .toArray();
+    }
+
 
 app.post("/collections/:collectionName", function (req, res, next) {
   xyz = req.body;
@@ -233,6 +243,11 @@ app.use(function (req, res, next) {
     res.send("file not found");
   })
  */
+  app.get("http://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com/search/:searchTerm", async (req, res) => {  
+    const result = await searchLesson(req.params.searchTerm);
+    res.send(result);
+  });
+
   var staticPath = path.join(__dirname, "images");
   app.use(express.static(staticPath));
   
