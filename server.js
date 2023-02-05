@@ -237,6 +237,8 @@ app.use(function (req, res, next) {
   app.use(express.static(staticPath));
   
   
+  const port = process.env.PORT || 3000;
+app.listen(port, function() {
+console.log("App started on port: " + port);
+});
   
-  
-  app.listen(3000, () => console.log("Server listening on port 3000"));
