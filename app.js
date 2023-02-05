@@ -1,4 +1,4 @@
-const API_URL = "http://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com";
+
 
 let app = new Vue ({
     el: '#app',
@@ -7,7 +7,7 @@ let app = new Vue ({
         sitename:'e-learning Store',
         onHome: true,
         // showlesson: true,
-        url: "http://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com",
+        url: "https://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com",
         //canAddToCart:true,
         cart:[],
         searchTerm: "",
@@ -29,7 +29,7 @@ let app = new Vue ({
 
     // fetching the lessons in json from the get path
     created: function () {
-        fetch("http://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com/collections/lessons")
+        fetch("https://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com/collections/lessons")
           .then((response) => response.json())
           .then((lessons) => {
             this.lessons = lessons;
@@ -77,7 +77,7 @@ methods: {
       },
 
       createNewOrder(order) {
-        fetch("http://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com/collections/orders", {
+        fetch("https://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com/collections/orders", {
           method: "POST", //set the HTTP method as "POST"
           headers: {
             "Content-Type": "application/json", //set the data type as JSON
