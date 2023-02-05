@@ -8,7 +8,7 @@
     "properties-reader": "^2.2.0"
   },
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js"
   },
   "name": "individualcw1-master",
   "version": "1.0.0",
