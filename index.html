@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link
+    
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
+    <!-- <script src="lesson.js"></script> -->
+  </head>
+  
+  <body>
+  
+    <div id="app">    <!-- Application start-->      
+        <div >                  <!-- Checkout Buttons-->
+        <header>
+            <button class="fa fa-shopping-basket" class="text-center" class="btn btn-outline-dark mt-auto" v-if="enableCheckout" @click="showCheckout">{{totalItems}} Checkout!</button>
+            <button class="fa fa-shopping-basket" class="text-center" class="btn btn-outline-dark mt-auto" disabled v-else>Checkout</button>
+        </div>
+            <!--                           Buttons Below are the Sort Buttons                            -->
+            <button class="text-center" class="btn btn-outline-dark mt-auto" v-on:click="lesson in sortedProductsAscending">Ascending</button>
+            <button class="text-center" class="btn btn-outline-dark mt-auto" v-on:click="lesson in sortedProductsDescending">Descending</button>
+          </header>
+
+
+          <div v-if="onHome"> <!-- Showing Lesson Instance using "if"-->
+            <p>
+                <label>Search Lesson: </label> 
+                <input type="text" v-model="search" placeholder="Type something"> <!-- Search input-->
+            </p>
+            
+            <section class="py-5">
+            <div class="container px-1000 px-lg-1000 mt-1000">
+                <div class="row gx-400 gx-lg-500 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                 <div  v-for="lesson in lessons" class="result"  >
+                    <img class="result" >
+                        <div class="card h-100">
+                            <div class="card-body p-4" >
+                                <img img v-bind:src="lesson.img" width = "150">
+                                <div class="text-center">
+                                    <div class="container2">                        
+                                    <div>Subject: {{lesson.subject}}</div>
+                                    <div>Location: {{lesson.location}}</div>  <!-- Displaying Lesson Array Details-->
+                                    <div>Spaces: {{lesson.space}}</div>
+                                    <div>Price: £{{lesson.price}}</div>
+                                </div>
+                            </div>
+                        </div>                      <!-- Add To Cart Button-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <button class="text-center" class="btn btn-outline-dark mt-auto" v-if="canAddToCart(lesson)" v-on:click="addToCart(lesson)">add to cart</button>
+                                 <button class="text-center" class="btn btn-outline-dark mt-auto" v-else disabled>add to cart</button>
+                                <span v-if="lesson.space === cartCount(lesson.id)"> all out</span>
+                                <span v-else-if="lesson.space - cartCount(lesson.id) < 5"> only {{lesson.space - cartCount(lesson.id)}} left</span>
+                                <span v-else>Availble to purchase {{(lesson.space)}}</span>
+                            </div>
+                </div>
+                 </div>
+                </div>
+        
+         </div>
+        </section>
+        </div>
+    
+        <div v-else> <!-- Displaying Shopping Cart Using "else"-->
+
+                <table>
+                 <thead>
+                     <tr>
+                         <th>Lesson</th>
+                         
+                         <th>Location</th>  <!-- Displaying Cart Detail headings-->
+                         <th>Space</th>
+                         <th>Price</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     <tr v-for="item in cart"> 
+                         <td>{{item.lesson.subject}}</td>
+                         <td>{{item.lesson.location}}</td>  <!-- Displaying Products That have been added to cart-->
+                          <td>{{item.quantity}}</td>
+                         <td>£{{item.lesson.price}}</td>
+                         <td>
+                              <button v-on:click="removeItem(item)">Remove</button> 
+                         </td>
+ 
+ 
+                     </tr>
+                 </tbody>
+             </table>
+             <h2> Welcome to Checkout</h2> <!-- Check Out-->
+             <p>
+                Name:
+                <input id="name" v-model="order.name">           <!-- User Input Name-->
+             </p>
+             <p>
+                phone:
+                <input id="phone" v-model.number="order.phone">   <!-- User Input Phone Number-->
+             </p>
+             <div class="submit">
+                    <p><strong>Customer Information:</strong></p> <!-- Displays Customer Information Simtainously-->
+                    <p>Name: {{order.name}}</p>          
+                    <p>Phone: {{order.phone}}</p> 
+             </div>
+             <button v-if="enableSubmit" v-on:click="submitForm" v-on:click="showlessons"> submit</button>   <!-- Submit Button-->
+             <button v-else disabled>Submit</button>
+
+             
+        </div>
+    </div>
+
+
+
+
+    <script src="app.js"></script>
+</body>
+</html>  
