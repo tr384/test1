@@ -27,6 +27,10 @@ let app = new Vue ({
         },
       },
 
+    mounted(){
+      this.getLessons()
+    },
+
     // fetching the lessons in json from the get path
     created: function () {
         fetch("https://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com/collections/lessons")
@@ -35,22 +39,23 @@ let app = new Vue ({
             this.lessons = lessons;
             return;
           });
-        this.getLessons();
+        // this.getLessons();
         return;
       },
-      
+
       watch: {
-        search: {
+        searchTerm: {
             handler() {
+              if(this.searchTerm === "")
                 this.getLessons();
             },
             deep: true,
         },
     },
 
-methods: {    
+methods: {
     getLessons() {
-        const url = `${this.url}/?search=${this.search}`;
+        const url = `${this.url}/collections/lessons`;
         fetch(url)
           .then((response) => {
             if (!response.ok) {
@@ -62,21 +67,25 @@ methods: {
             this.lessons = lessons;
           })
           .catch((Error) => {
-            console.log("Error");
+            console.log("Error", Error);
           });
       },
-    
+
       async search() { // This is a search function through the api endpoint
-        let response = await fetch(`${this.url}/lessons/${this.searchTerm}`, { // search term function is used for the fetch get request to the api
+        if(this.searchTerm !== ""){
+          let response = await fetch(`${this.url}/collections/lessons/search?search=${this.searchTerm}`, {
           method: "GET",
         });
         let data = await response.json(); // the response is stored then called by the response.json
         this.lessons = data;
-  
-        console.log("data: ", data); // log message will format the values and process information.
+
+        console.log("data: ", data);
+        }
+        // log message will format the values and process information.
       },
 
       createNewOrder(order) {
+        console.log("order", order)
         fetch("https://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com/collections/orders", {
           method: "POST", //set the HTTP method as "POST"
           headers: {
@@ -86,16 +95,17 @@ methods: {
         }).then(function (response) {
           response.json().then(function (json) {
             // alert("Success: " + json.acknowledged);
+
             console.log("Success: " + json.acknowledged);
             // webstore.products.push(order);
           });
         });
       },
-     
+
        async updateLesson({ lesson, space }) {
         try {
           const url = `${this.url}/lessons/${lesson.id}`;
-  
+
           fetch(url, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -106,7 +116,7 @@ methods: {
         } catch (error) {
           this.error = error;
         }
-      }, 
+      },
 
 
        updateLessonSpaces(type, id) {
@@ -115,36 +125,36 @@ methods: {
             this.lessons = this.lessons.map((lesson) => {
               if (lesson.id === id && lesson.space > 0)
                 return { ...lesson, space: lesson.space-- };
-  
+
               return lesson;
             });
             break;
-  
+
           case "increase":
             this.lessons = this.lessons.map((lesson) => {
               if (lesson.id === id && lesson.space > 0)
                 return { ...lesson, space: lesson.space++ };
-  
+
               return lesson;
             });
             break;
-  
+
           default:
             break;
         }
       },
- 
+
       changePage() {
         this.onHome = !this.onHome;
       },
-       
+
 
     submitForm(){                         //Form Submission At Checkout, Alert Prompt
          alert('Order Has Been Submitted')
 
-    },   
+    },
 
-    addToCart (lesson) {            
+    addToCart (lesson) {
        let cartItem = this.GetCartItem(lesson);
 
        if(cartItem != null){                            //if the cart item is null then add 1 to quantity else add the lesson to the cart
@@ -158,10 +168,10 @@ methods: {
         lesson.space--;
     },
 
-    
 
 
-    cartCount(lesson) {               //counts how many items are added to the cart, and adds to the cart 
+
+    cartCount(lesson) {               //counts how many items are added to the cart, and adds to the cart
         let count = 0;
         for(let i = 0; i < this.cart.length; i++) {
             if(this.cart[i] === lesson) {
@@ -175,11 +185,11 @@ methods: {
         return lesson.space > 0;
 
     },
-    
+
      showCheckout() {                   //shows the check out when toogled
         // this.showlesson = this.showlesson? false: true;
         this.onHome = this.onHome? false: true;
-    }, 
+    },
 
     GetCartItem(lesson){          //Gets the item in cart By id
         for (i= 0; i < this.cart.length; i++) {
@@ -200,17 +210,19 @@ methods: {
     },
 
     checkout() {
-      this.cart.forEach(async (lesson) => {
+      // console.log(cart)
+      this.cart.forEach((lesson) => {
+        // console.log("lesson",lesson.lesson)
         this.createNewOrder({
-          name: this.checkoutForm.name.value,
-          phone: this.checkoutForm.phone.value,
-          id: lesson.id,
-          space: lesson.space,
+          name: this.order.name,
+          phone: this.order.phone,
+          id: lesson.lesson.id,
+          space: lesson.lesson.space,
         });
 
         this.updateLesson({
-          id: lesson._id,
-          space: lesson.space,
+          id: lesson.lesson._id,
+          space: lesson.lesson.space,
         });
       });
 
@@ -218,15 +230,15 @@ methods: {
 
       this.cart = [];
     },
-    
 
-    
 
-          
-        
-    }, 
+
+
+
+
+    },
 computed:{
-   
+
 
      /* lessonSearch () {
         tempLessons = this.lesson;
@@ -236,12 +248,12 @@ computed:{
                 return result.subject.toUpperCase().includes(this.search.toUpperCase()) ||
                 result.location.toUpperCase().includes(this.search.toUpperCase())
             })
-        
+
         }
         return tempLessons
         },  */
 
-       
+
         enableSubmit: function(){                        //checks phone and name for regular expressions
             let isnum = /^\d+$/.test(this.order.phone);
             let isletter = /^[A-Za-z]+$/.test(this.order.name);
@@ -250,9 +262,9 @@ computed:{
 
          totalItems: function() {                           //returns the number of items in cart
             return this.cart.length;
-        }, 
+        },
 
-      
+
 
         enableCheckout: function(){                        //Enables the checkout when cart has more than 0 items
             return this.cart.length > 0;
@@ -263,26 +275,25 @@ computed:{
             return 0;
           },
         },
-        watch: {
-          searchText: {
-            handler(val) {
-              this.getLessons();
-            },
-          },
-        },
-        watch: { // This function allows the search term to change values when a letter is being processed
-          searchTerm() {
-            if(this.searchTerm) {
-              this.search();
-            } else {
-              this.getLessons();
-            }
-          },
-        },
+        // watch: {
+        //   searchText: {
+        //     handler(val) {
+        //       this.getLessons();
+        //     },
+        //   },
+        // },
+        // watch: { // This function allows the search term to change values when a letter is being processed
+        //   searchTerm() {
+        //     if(this.searchTerm) {
+        //       this.search();
+        //     } else {
+        //       this.getLessons();
+        //     }
+        //   },
+        // },
       });
 
 
 
 
 
-        
