@@ -44,7 +44,10 @@ app.param("collectionName", function (req, res, next, collectionName) {
     res.send("choose collection e.g /collections/lessons");
 
   });
+
+  
        // get lessons
+
   app.get("/collections/:collectionName", function (req, res, next) {
 
     req.collection.find({}).toArray(function (err, results) {
@@ -113,7 +116,9 @@ app.put("/collections/:collectionName/:id", function (req, res, next) {
     "/collections/:collectionName/search",
     function (req, res, next) {
       //const searchText = req.query.search;
-      let searchText = req.query.search;
+
+      let searchText = req.params.query;
+
 
       let query = {};
       query = {
