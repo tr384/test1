@@ -7,7 +7,7 @@ let app = new Vue ({
         sitename:'e-learning Store',
         onHome: true,
         // showlesson: true,
-        url: "http://localhost:3000",
+        url: "https://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com",
         //canAddToCart:true,
         cart:[],
         searchTerm: "",
