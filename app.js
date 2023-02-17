@@ -86,7 +86,7 @@ methods: {
 
       createNewOrder(order) {
         console.log("order", order)
-        fetch("http://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com/collections/orders", {
+        fetch("https://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com/collections/orders", {
           method: "POST", //set the HTTP method as "POST"
           headers: {
             "Content-Type": "application/json", //set the data type as JSON

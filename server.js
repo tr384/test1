@@ -54,7 +54,7 @@ app.param("collectionName", function (req, res, next, collectionName) {
       res.send(results);
     });
   });
-
+       
   async function searchLesson(searchTerm) { // search lesson function allows the mongodb used to search for the lessons matching in the database from the collections
     return client
       .db("project")
@@ -65,7 +65,7 @@ app.param("collectionName", function (req, res, next, collectionName) {
       .toArray();
     }
 
-
+/* 
 app.post("/collections/:collectionName", function (req, res, next) {
   xyz = req.body;
   // req.body.id = new ObjectId();
@@ -75,8 +75,9 @@ app.post("/collections/:collectionName", function (req, res, next) {
     }
     res.send(results);
   });
-});
+}); */
 
+                     //update lesson space
 app.put("/collections/:collectionName/:id", function (req, res, next) {
   const lesson = req.params.id;
   const space = req.body.space;
@@ -113,7 +114,8 @@ app.put("/collections/:collectionName/:id", function (req, res, next) {
     "/collections/:collectionName/search",
     function (req, res, next) {
       //const searchText = req.query.search;
-      let searchText = req.query.search;
+
+      let searchText = req.params.query;
 
       let query = {};
       query = {
@@ -139,7 +141,11 @@ app.put("/collections/:collectionName/:id", function (req, res, next) {
   //     res.send(results);
   //   });
   // });
-  app.post("/collections/:collectionName", function (req, res, next) {
+
+
+
+ /*  app.post("/collections/:collectionName", function (req, res, next) {
+>>>>>>> 850f3fc73c9eacf2568996bcd1bce4e2ecd72db5
     xyz = req.body;
     // req.body.id = new ObjectId();
     req.collection.insertOne(xyz, function (err, results) {
@@ -148,7 +154,7 @@ app.put("/collections/:collectionName/:id", function (req, res, next) {
       }
       res.send(results);
     });
-  });
+  }); */
 
   app.get('/collections/:collectionName/:id'
   , function(req, res, next) {
@@ -160,7 +166,7 @@ app.put("/collections/:collectionName/:id", function (req, res, next) {
   });
   });
 
-  app.post('/collections/:collectionName'
+  app.post('/collections/:collectionName'     //add to database
 , function(req, res, next) {
 // TODO: Validate req.body
 req.collection.insertOne(req.body, function(err, results) {
@@ -245,6 +251,8 @@ app.use(function (req, res, next) {
     res.send("file not found");
   })
  */
+
+
   app.get("http://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com/search/:searchTerm", async (req, res) => {
     const result = await searchLesson(req.params.searchTerm);
     res.send(result);
