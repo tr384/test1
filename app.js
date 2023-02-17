@@ -33,7 +33,7 @@ let app = new Vue ({
 
     // fetching the lessons in json from the get path
     created: function () {
-        fetch("http://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com/collections/lessons")
+        fetch("https://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com/collections/lessons")
           .then((response) => response.json())
           .then((lessons) => {
             this.lessons = lessons;
