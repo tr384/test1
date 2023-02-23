@@ -253,7 +253,7 @@ app.use(function (req, res, next) {
  */
 
 
-  app.get("https://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com/search/:searchTerm", async (req, res) => {
+  app.get("http://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com/search/:searchTerm", async (req, res) => {
     const result = await searchLesson(req.params.searchTerm);
     res.send(result);
   });
