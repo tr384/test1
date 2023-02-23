@@ -73,7 +73,7 @@ methods: {
 
       async search() { // This is a search function through the api endpoint
         if(this.searchTerm !== ""){
-          let response = await fetch("https://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com/collections/lessons/search?search=${this.searchTerm}", {
+          let response = await fetch("http://newcw2-env.eba-sw23cwmq.eu-west-2.elasticbeanstalk.com/collections/lessons/search?search=${this.searchTerm}", {
           method: "GET",
         });
         let data = await response.json(); // the response is stored then called by the response.json
